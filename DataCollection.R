@@ -44,20 +44,20 @@ ggplot() +
 #---------------------------------------------------------
 # ETH
 ETH$ma7 = rollmeanr(ETH$adjusted, k = 7, fill = NA)
-ETH$ma200 = rollmeanr(ETH$adjusted, k = 200, fill = NA)
+ETH$ma50 = rollmeanr(ETH$adjusted, k = 50, fill = NA)
 
 ETH$RSI = RSI(ETH$adjusted)
 
 ggplot() +
   geom_line(aes(x = date, y = adjusted), data = ETH) +
   geom_line(aes(x = date, y = ma7, color = "blue"), data = ETH) +
-  geom_line(aes(x = date, y = ma200, color = "red"), data = ETH) +
+  geom_line(aes(x = date, y = ma50, color = "red"), data = ETH) +
   theme_tq() +
   labs(x = "Date",
        y = "Adjusted Price",
        title = "Ethereum Adjusted Prices over Time") +
   scale_color_discrete(name = "Moving Average",
-                       labels = c("7-Day", "200-Day")) +
+                       labels = c("7-Day", "50-Day")) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggplot() +
@@ -165,6 +165,22 @@ write.csv(ADA, "ADA.csv")
 write.csv(DOGE, "DOGE.csv")
 write.csv(LTC, "LTC.csv")
 
+#---------------------------------------------------------
+crypto = read.csv("Crypto_groupA1.csv")
 
+crypto$asset_id = as.factor(crypto$asset_id)
 
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442")
 
+ggplot() +
+  geom_line(aes(x = time, y = galaxy_score,
+                group = asset_id, color = asset_id),
+            data = crypto) +
+  geom_hline(yintercept = 70, linetype = "dashed", color = "red") +
+  geom_hline(yintercept = 60, linetype = "dashed", color = "red") +
+  theme_tq() +
+  scale_colour_manual(values = cbPalette, name = "Crypto",
+                      labels = c("BTC", "ETH", "LTC", "ADA", "DOGE")) +
+  labs(x = "Day", y = "Galaxy Score",
+       title = "Galaxy Score over Time by Crypto") +
+  theme(plot.title = element_text(hjust = 0.5))
